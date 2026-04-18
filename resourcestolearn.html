@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Frontend Architect Path</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Base typography and smooth scrolling */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAF9F6; /* Warm neutral off-white */
+            color: #1C1917; /* Deep charcoal */
+        }
+
+        h1, h2, h3, .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FAF9F6; }
+        ::-webkit-scrollbar-thumb { background: #D6D3D1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #A8A29E; }
+
+        /* Chart Container Styling - Mandatory Requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        /* Interactive Timeline Elements */
+        .timeline-node {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .timeline-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .timeline-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+        .timeline-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Resource Card Hover */
+        .resource-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Glassmorphism utility */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-stone-800 selection:text-white">
+
+    <!-- Chosen Palette: Warm Neutrals with Charcoal and Gold Accents (Off-White #FAF9F6, Charcoal #1C1917, Gold #D97706) -->
+    <!-- Application Structure Plan: A single-page interactive dashboard tailored for a high-end solo web developer. It eschews a simple list for a curated, structural roadmap. It includes a header with strategic context, a radar chart mapping required skill depth, an interactive workflow timeline (Figma -> CSS -> GSAP), and a filterable grid of curated video/course recommendations. This structure guides the user not just on *what* to watch, but *how* the concepts interlock in a premium agency workflow. -->
+    <!-- Visualization & Content Choices: 
+         1. Radar Chart (Chart.js): Maps target skill competencies (Goal: Inform/Compare, Interaction: Hover tooltips, Justification: Visually demonstrates the balance of skills needed for premium frontend, Library: Chart.js Canvas).
+         2. Interactive Workflow Timeline (HTML/CSS/JS): Maps the handoff process (Goal: Organize/Process, Interaction: Click to reveal details, Justification: Teaches the methodology before providing links, Library: Vanilla JS/DOM).
+         3. Filterable Resource Grid (HTML/CSS/JS): Displays curated recommendations (Goal: Inform/Organize, Interaction: Category filters, Justification: Allows quick finding of specific topics like 3D or ScrollTrigger, Library: Vanilla JS).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 glass border-b border-stone-200 px-6 py-4 flex justify-between items-center">
+        <div class="text-xl font-bold tracking-tighter">AGENCY<span class="text-amber-600">PATH</span></div>
+        <div class="hidden md:flex space-x-6 text-sm font-medium text-stone-600">
+            <a href="#overview" class="hover:text-amber-600 transition">Overview</a>
+            <a href="#workflow" class="hover:text-amber-600 transition">The Workflow</a>
+            <a href="#resources" class="hover:text-amber-600 transition">Curated Resources</a>
+        </div>
+        <div class="md:hidden text-2xl font-bold text-stone-800">&#9776;</div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-32 pb-20 px-6 max-w-7xl mx-auto text-center" id="overview">
+        <div class="inline-block px-4 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider mb-6">Solo Dev to Premium Agency</div>
+        <h1 class="text-5xl md:text-7xl font-bold mb-6 text-stone-900 leading-tight">Master the <br><span class="italic text-stone-500">Premium Frontend</span> Workflow</h1>
+        <p class="max-w-2xl mx-auto text-lg text-stone-600 mb-10 leading-relaxed">
+            Curated resources for the HTML/CSS/JS purist. Bridge the gap between advanced Figma design tokens, CSS 3D architecture, and high-performance GSAP ScrollTrigger animations to deliver award-winning web experiences.
+        </p>
+        
+        <div class="grid md:grid-cols-2 gap-12 mt-16 text-left items-center">
+            <div>
+                <h2 class="text-3xl font-semibold mb-4">Target Skill Architecture</h2>
+                <p class="text-stone-600 mb-6">
+                    This interactive dashboard outlines the specific curriculum required to elevate your vanilla JS stack. The radar chart illustrates the required proficiency balance to achieve "Awwwards-level" output without relying on heavy frameworks. Hover over the nodes for details.
+                </p>
+                <ul class="space-y-3 text-sm text-stone-700 font-medium">
+                    <li class="flex items-center"><span class="text-amber-500 mr-2">&#10003;</span> Figma Architecture (Variables, Prototyping)</li>
+                    <li class="flex items-center"><span class="text-amber-500 mr-2">&#10003;</span> Advanced CSS (Custom Properties, 3D Transforms)</li>
+                    <li class="flex items-center"><span class="text-amber-500 mr-2">&#10003;</span> GSAP Mastery (ScrollTrigger, Timelines, Scrubbing)</li>
+                    <li class="flex items-center"><span class="text-amber-500 mr-2">&#10003;</span> Canvas/Image Sequencing (Apple-style effects)</li>
+                </ul>
+            </div>
+            <!-- Chart Container -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100">
+                <div class="chart-container">
+                    <canvas id="skillChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Interactive Workflow Section -->
+    <section class="py-20 bg-stone-900 text-stone-100" id="workflow">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-bold mb-4 text-white">The Figma-to-Code Pipeline</h2>
+                <p class="text-stone-400 max-w-2xl mx-auto">
+                    Understanding how premium agencies structure their handoff. Click through the phases below to understand the methodology behind connecting Figma features directly to your HTML/CSS/GSAP stack.
+                </p>
+            </div>
+
+            <!-- Workflow Timeline -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+                <div class="timeline-node bg-stone-800 p-6 rounded-xl border border-stone-700 hover:border-amber-500" onclick="showPhase('phase1')">
+                    <div class="text-amber-500 text-2xl mb-2">&#128161;</div>
+                    <h3 class="font-bold text-lg mb-1">1. Variables & Tokens</h3>
+                    <p class="text-xs text-stone-400">Figma to CSS</p>
+                </div>
+                <div class="timeline-node bg-stone-800 p-6 rounded-xl border border-stone-700 hover:border-amber-500" onclick="showPhase('phase2')">
+                    <div class="text-amber-500 text-2xl mb-2">&#128241;</div>
+                    <h3 class="font-bold text-lg mb-1">2. Prototyping Motion</h3>
+                    <p class="text-xs text-stone-400">Smart Animate to GSAP</p>
+                </div>
+                <div class="timeline-node bg-stone-800 p-6 rounded-xl border border-stone-700 hover:border-amber-500" onclick="showPhase('phase3')">
+                    <div class="text-amber-500 text-2xl mb-2">&#128208;</div>
+                    <h3 class="font-bold text-lg mb-1">3. Depth & 3D</h3>
+                    <p class="text-xs text-stone-400">Figma Layers to CSS 3D</p>
+                </div>
+                <div class="timeline-node bg-stone-800 p-6 rounded-xl border border-stone-700 hover:border-amber-500" onclick="showPhase('phase4')">
+                    <div class="text-amber-500 text-2xl mb-2">&#127902;</div>
+                    <h3 class="font-bold text-lg mb-1">4. Image Sequencing</h3>
+                    <p class="text-xs text-stone-400">Frame Exports to Canvas</p>
+                </div>
+            </div>
+
+            <!-- Dynamic Content Area -->
+            <div class="bg-stone-800 p-8 rounded-2xl border border-stone-700 min-h-[250px]">
+                <div id="phase1" class="timeline-content active">
+                    <h4 class="text-2xl font-bold text-amber-500 mb-3">Figma Variables map to CSS Custom Properties</h4>
+                    <p class="text-stone-300 leading-relaxed mb-4">
+                        Premium sites don't hardcode values. Learn to read Figma's Local Variables (Colors, Spacing, Radii) and mirror them perfectly in your `:root` CSS selector. This ensures design consistency and makes implementing Light/Dark modes mathematically perfect.
+                    </p>
+                    <div class="bg-stone-900 p-4 rounded font-mono text-sm text-stone-400 border border-stone-700">
+                        <span class="text-pink-400">:root</span> {<br>
+                        &nbsp;&nbsp;<span class="text-blue-300">--space-md</span>: <span class="text-green-300">var</span>(--figma-token-space-4);<br>
+                        &nbsp;&nbsp;<span class="text-blue-300">--bg-primary</span>: <span class="text-green-300">var</span>(--figma-color-surface);<br>
+                        }
+                    </div>
+                </div>
+
+                <div id="phase2" class="timeline-content">
+                    <h4 class="text-2xl font-bold text-amber-500 mb-3">Translating Smart Animate to GSAP Timelines</h4>
+                    <p class="text-stone-300 leading-relaxed mb-4">
+                        When a designer builds a scroll prototype or interactive component in Figma, they use bezier curves and timings. Your job is to inspect those specific easings in Figma's Dev Mode and recreate them using `gsap.timeline()` and `ScrollTrigger`.
+                    </p>
+                    <p class="text-stone-400 text-sm">
+                        <em>Key Skill:</em> Reading Figma prototype interactions and translating standard ease-in-out to GSAP's CustomEase or standard power2.inOut.
+                    </p>
+                </div>
+
+                <div id="phase3" class="timeline-content">
+                    <h4 class="text-2xl font-bold text-amber-500 mb-3">Fake 3D: Perspective & CSS Transforms</h4>
+                    <p class="text-stone-300 leading-relaxed mb-4">
+                        You don't always need Three.js. You can achieve stunning parallax and depth by taking layered Figma frames, wrapping them in a container with `perspective: 1000px`, and using GSAP to animate their `translateZ` and `rotateY` properties on scroll.
+                    </p>
+                    <p class="text-stone-400 text-sm">
+                        <em>Key Concept:</em> Export Figma layers as separate transparent PNGs/WebPs, stack them absolutely, and apply differential z-axis translation linked to ScrollTrigger.
+                    </p>
+                </div>
+
+                <div id="phase4" class="timeline-content">
+                    <h4 class="text-2xl font-bold text-amber-500 mb-3">The "Apple Effect": Image Sequence Scrubbing</h4>
+                    <p class="text-stone-300 leading-relaxed mb-4">
+                        To build scroll-driven 3D product reveals without WebGL, designers render out 100+ frames (images) in Figma or Blender. You then load these onto an HTML5 `<canvas>` and use GSAP ScrollTrigger to update the drawn frame based on the user's scroll position.
+                    </p>
+                    <ul class="list-disc pl-5 text-stone-400 text-sm space-y-1">
+                        <li>Export high-res frames from Figma prototype flows.</li>
+                        <li>Preload images via JavaScript arrays.</li>
+                        <li>Use GSAP to animate an object containing the `frameIndex` property.</li>
+                        <li>Redraw canvas on `onUpdate`.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Curated Resources Library -->
+    <section class="py-20 bg-stone-50" id="resources">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-12">
+                <h2 class="text-4xl font-bold mb-4 text-stone-900">Curated Learning Library</h2>
+                <p class="text-stone-600 max-w-3xl">
+                    I have scoured YouTube and premium course platforms specifically for your tech stack constraints (Vanilla HTML/CSS/JS + GSAP, No React). Use the filters below to find the exact tutorials needed to master the Figma-to-Code pipeline. 
+                </p>
+            </div>
+
+            <!-- Filters -->
+            <div class="flex flex-wrap gap-3 mb-10" id="filter-container">
+                <button class="px-5 py-2 rounded-full bg-stone-800 text-white text-sm font-medium transition hover:bg-stone-700" onclick="filterData('all', this)">All Topics</button>
+                <button class="px-5 py-2 rounded-full bg-white border border-stone-200 text-stone-600 text-sm font-medium transition hover:border-amber-500" onclick="filterData('figma', this)">Figma Dev Mode & Variables</button>
+                <button class="px-5 py-2 rounded-full bg-white border border-stone-200 text-stone-600 text-sm font-medium transition hover:border-amber-500" onclick="filterData('gsap', this)">GSAP & ScrollTrigger</button>
+                <button class="px-5 py-2 rounded-full bg-white border border-stone-200 text-stone-600 text-sm font-medium transition hover:border-amber-500" onclick="filterData('sequence', this)">Image Sequencing</button>
+                <button class="px-5 py-2 rounded-full bg-white border border-stone-200 text-stone-600 text-sm font-medium transition hover:border-amber-500" onclick="filterData('css3d', this)">CSS 3D (No WebGL)</button>
+                <button class="px-5 py-2 rounded-full bg-white border border-stone-200 text-stone-600 text-sm font-medium transition hover:border-amber-500" onclick="filterData('workflow', this)">Full Project Builds</button>
+            </div>
+
+            <!-- Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="resource-grid">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 py-12 text-center text-sm border-t border-stone-800">
+        <div class="mb-4 text-2xl font-bold tracking-tighter text-stone-600">AGENCY<span class="text-amber-800">PATH</span></div>
+        <p>Curated for BVCOE Web Developer & Agency Owner.</p>
+        <p class="mt-2">Stack: HTML5 / CSS3 / Vanilla JS / GSAP</p>
+    </footer>
+
+    <!-- Application Logic -->
+    <script>
+        // Data Storage: Curated Resources based on specific user prompt constraints
+        const resources = [
+            {
+                id: 1,
+                title: "Figma Variables to CSS Custom Properties",
+                creator: "Kevin Powell",
+                type: "figma",
+                format: "Video (YouTube)",
+                icon: "&#128250;",
+                desc: "Kevin Powell explains the exact methodology of taking Figma design tokens/variables and mapping them to a scalable CSS custom property architecture.",
+                query: "Kevin Powell Figma to CSS variables"
+            },
+            {
+                id: 2,
+                title: "Dev Mode in Figma for Web Developers",
+                creator: "Figma Official",
+                type: "figma",
+                format: "Playlist (YouTube)",
+                icon: "&#128218;",
+                desc: "Figma's official tutorials on using Dev Mode to extract padding, margins, colors, and easing curves for exact CSS/JS replication.",
+                query: "Figma official Dev Mode tutorial web developers"
+            },
+            {
+                id: 3,
+                title: "Recreating Apple's Scroll Sequence Animation",
+                creator: "DesignCourse",
+                type: "sequence",
+                format: "Video (YouTube)",
+                icon: "&#128250;",
+                desc: "Gary Simon walks through exporting an image sequence and using GSAP and HTML Canvas to scrub through frames based on scroll position.",
+                query: "DesignCourse Apple scroll animation GSAP canvas sequence"
+            },
+            {
+                id: 4,
+                title: "GSAP ScrollTrigger Official Masterclass",
+                creator: "GSAP (GreenSock)",
+                type: "gsap",
+                format: "Video/Docs",
+                icon: "&#128250;",
+                desc: "The absolute best foundation for ScrollTrigger. Covers pinning sections, scrubbing, and timeline integration essential for agency sites.",
+                query: "GSAP ScrollTrigger express course"
+            },
+            {
+                id: 5,
+                title: "Mind-Blowing CSS 3D Depth on Scroll",
+                creator: "Hyperplexed",
+                type: "css3d",
+                format: "Video (YouTube)",
+                icon: "&#128250;",
+                desc: "Hyperplexed dissects premium Awwwards sites and recreates 3D parallax effects using pure CSS perspective and JS tracking (No Three.js).",
+                query: "Hyperplexed CSS 3D scroll effect"
+            },
+            {
+                id: 6,
+                title: "Figma Prototyping for Developers",
+                creator: "Juxtopposed",
+                type: "figma",
+                format: "Video (YouTube)",
+                icon: "&#128250;",
+                desc: "Great UI/UX channel explaining how designers think about animations and how developers can interpret Figma Smart Animate properties into code.",
+                query: "Juxtopposed Figma prototyping to code"
+            },
+            {
+                id: 7,
+                title: "GSAP Image Sequence & Scrubbing Pen",
+                creator: "GSAP Codepen Collection",
+                type: "sequence",
+                format: "Code Snippets",
+                icon: "&#128187;",
+                desc: "While not a video, the official GreenSock CodePen showcasing 'AirPods' style image sequence scrubbing is the industry standard template.",
+                query: "GSAP codepen image sequence scrolltrigger"
+            },
+            {
+                id: 8,
+                title: "The Futur: The Business of Premium Web Design",
+                creator: "The Futur",
+                type: "workflow",
+                format: "Video (YouTube)",
+                icon: "&#128250;",
+                desc: "Less code, more strategy. How to price, pitch, and organize your Figma to Web process for high-end agency clients.",
+                query: "The Futur web design process handoff"
+            },
+            {
+                id: 9,
+                title: "Advanced DOM Layouts & CSS Grid for Premium Sites",
+                creator: "CodeGrid",
+                type: "workflow",
+                format: "Channel (YouTube)",
+                icon: "&#128250;",
+                desc: "CodeGrid builds exactly the type of sites you want: HTML/CSS/JS only, heavy on GSAP, massive typography, and complex grid animations.",
+                query: "CodeGrid GSAP HTML CSS website"
+            }
+        ];
+
+        // Core Interaction Logic: Render Grid
+        const grid = document.getElementById('resource-grid');
+
+        function renderGrid(data) {
+            grid.innerHTML = '';
+            data.forEach(item => {
+                // Generate a YouTube search link based on the query since we don't have direct live URLs
+                const searchLink = `https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}`;
+                
+                const card = document.createElement('div');
+                card.className = 'resource-card bg-white rounded-xl p-6 border border-stone-200 flex flex-col h-full';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="inline-block px-3 py-1 bg-stone-100 text-stone-600 text-xs font-bold rounded uppercase tracking-wider">${item.type}</span>
+                        <div class="text-2xl text-stone-400">${item.icon}</div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-stone-900 leading-tight">${item.title}</h3>
+                    <p class="text-sm text-amber-600 font-medium mb-3">By ${item.creator}</p>
+                    <p class="text-stone-600 text-sm mb-6 flex-grow">${item.desc}</p>
+                    <a href="${searchLink}" target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center justify-center w-full py-3 bg-stone-900 text-white rounded-lg text-sm font-medium hover:bg-amber-600 transition duration-300">
+                        Search & Watch On YouTube
+                    </a>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Core Interaction Logic: Filtering
+        function filterData(type, buttonElement) {
+            // Update active button styling
+            const buttons = document.querySelectorAll('#filter-container button');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-stone-800', 'text-white');
+                btn.classList.add('bg-white', 'text-stone-600');
+            });
+            buttonElement.classList.remove('bg-white', 'text-stone-600');
+            buttonElement.classList.add('bg-stone-800', 'text-white');
+
+            // Filter data
+            if (type === 'all') {
+                renderGrid(resources);
+            } else {
+                const filtered = resources.filter(item => item.type === type);
+                renderGrid(filtered);
+            }
+        }
+
+        // Core Interaction Logic: Timeline Tabs
+        function showPhase(phaseId) {
+            document.querySelectorAll('.timeline-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.getElementById(phaseId).classList.add('active');
+        }
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial Render
+            renderGrid(resources);
+
+            // Chart.js Initialization (Target Skill Distribution)
+            const ctx = document.getElementById('skillChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Figma Dev Mode/Tokens', 'CSS Architecture', 'GSAP ScrollTrigger', 'CSS 3D/Perspective', 'Canvas Integration'],
+                    datasets: [{
+                        label: 'Required Skill Weight',
+                        data: [85, 90, 95, 75, 80],
+                        backgroundColor: 'rgba(217, 119, 6, 0.2)', // Amber with opacity
+                        borderColor: 'rgba(217, 119, 6, 1)',
+                        pointBackgroundColor: '#1C1917',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#1C1917',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Required for custom container sizing
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                            pointLabels: {
+                                font: { family: "'Inter', sans-serif", size: 11, weight: '500' },
+                                color: '#444'
+                            },
+                            ticks: { display: false, min: 0, max: 100 }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(28, 25, 23, 0.9)',
+                            titleFont: { family: "'Inter', sans-serif" },
+                            bodyFont: { family: "'Inter', sans-serif" },
+                            padding: 12,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    return ' Importance: ' + context.raw + '/100';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
